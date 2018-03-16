@@ -1,0 +1,315 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <dirent.h>
+#include <errno.h>
+#include <ctype.h>
+
+typedef struct TREE_{
+//If same Dir, GOOD
+char* Directory;
+
+char* FileName;
+
+char** Names;
+
+struct TREE_* Left;
+
+struct TREE_* Right;
+
+}DTree;
+
+//Insert Directory, fileName, after filename is read
+void Insert(char* Dir, char* FileName, char** Names);
+
+void DeleteTree();
+
+void PrevPath(char** C);
+
+void CatDir(char* app,char** C);
+
+void CatFile(char* app,char**C);
+
+void ReadDir(char* P,char* P2,bool BASE);
+
+char* toString(unsigned char* C);
+
+bool FileinDir(char* path);
+
+DTree* B = NULL;
+
+//USE Fgets
+//Use access
+//use fopen
+//use strcmp
+//use strcat
+//use chmod
+//
+int main(int argc, char** argv){
+/*
+DIR* currentDir= opendir(".");
+struct dirent * currentThing=NULL;
+do{
+if(currentDir!=NULL)
+currentThing=readdir(currentDir);
+if(currentThing==NULL){
+printf("\nEnd of directory reading\n");
+}
+if(currentThing->d_type==DT_REG){
+printf("\nFOUND A FILE\n");
+
+
+
+}
+else if(currentThing->d_type==DT_DIR){
+printf("\nFOUND A DIRECTORY\n");
+
+
+
+}
+
+
+}while(currentThing!=NULL);
+
+
+closedir(currentDir);
+*/
+
+char* T = malloc(2*sizeof(char));
+//T="ZULE";
+T[0]='H';
+T[1]='\0';
+
+//CatDir("./",&T);
+CatFile("/",&T);
+
+printf("NEW T: %s",T);
+
+char* P = malloc(2*sizeof(char));
+P[0]='.';
+P[1]='\0';
+
+char* P2 = malloc(sizeof(char));
+P2[0]='\0';
+
+
+
+ReadDir(P,P2,true);
+
+return 0;
+}
+
+void ReadDir(char* Path,char* Path2, bool BASE){
+
+BASE=FileinDir(Path);
+
+DIR* currentDir= opendir(Path);
+struct dirent * currentThing=NULL;
+
+do{
+if(currentDir!=NULL)
+currentThing=readdir(currentDir);
+if(currentThing==NULL){
+printf("\nEnd of directory reading\n");
+break;
+}
+if(currentThing->d_type==DT_REG){
+//printf("\nFOUND A FILE\n");
+
+printf("\n %s \n",currentThing->d_name);
+//Only have to append /!!
+//CatFile
+if(BASE==true){
+//Free Path Name
+free(Path);
+Path=NULL;
+//char** D = &(currentThing->d_name);
+//CatDir("./",D);
+Path = toString(currentThing->d_name);
+CatDir("./",&Path);
+
+if(access(Path,R_OK)==0){
+
+printf("\nREADABLE FILE\n");
+
+}
+else{
+
+printf("\nUNDREADABLE FILE\n");
+
+}
+
+}
+else{
+//Dont free Path Name
+char* c = toString(currentThing->d_name);
+
+CatFile("/",&c);
+
+strcat(Path2,c);
+
+if(access(Path2,R_OK)==0){
+
+printf("\nREADABLE FILE\n");
+
+}
+else{
+
+printf("\nUNDREADABLE FILE\n");
+
+}
+
+printf("\n FILE NOT IN BASE: %s\n", Path2);
+
+
+}
+}
+
+
+else if(currentThing->d_type==DT_DIR){
+printf("\n%s\n",currentThing->d_name);
+//Wher Hit next Dir outside of BASE
+if(currentThing->d_name!="."||currentThing->d_name!=".."){
+continue;
+}
+if(BASE==true){
+// Append ./
+//CatDir
+//ReadDir(Path,true);
+if(strlen(Path2)>1){
+free(Path2);
+Path2=NULL;
+Path2=malloc(sizeof(char));
+Path2[0]='\0';
+}
+
+CatDir("./",&Path2);
+
+printf("PATH 2:%s",Path2);
+ReadDir(Path,Path2,false);
+}
+/*
+else{
+
+// Append / to next Dir!
+//CatFile("/",&Path2);
+char* c = toString(currentThing->d_name);
+CatFile("/",&c);
+strcat(Path2,c);
+
+ReadDir(Path,Path2,false);
+
+
+}
+*/
+}
+
+printf("\n\n");
+}while(currentThing!=NULL);
+
+//free(Path);
+closedir(currentDir);
+
+
+return;
+}
+//
+//void CatDir(char* app,char** C);
+//
+//void CatFile(char* app,char**C);
+//
+//
+void CatDir(char* app, char** C){
+int i = strlen(*C);
+i=i+3;
+//Extra slot for a \0 and the / and the .
+
+char* z =malloc(i*sizeof(char));
+z[0]=app[0];
+z[1]=app[1];
+i=0;
+
+char t = (*C)[i];
+
+while(t!='\0'){
+z[i+2]=t;
+i++;
+t=(*C)[i];
+}
+
+z[i+2]='\0';
+
+free(*C);
+(*C)=NULL;
+(*C)=z;
+return;
+}
+void CatFile(char* app, char** C){
+
+int i = strlen(*C);
+i=i+2;
+//Extra slot for a \0 and the / and the .
+//
+char* z =malloc(i*sizeof(char));
+z[0]=app[0];
+
+i=0;
+char t = (*C)[i];
+//
+while(t!='\0'){
+z[i+1]=t;
+i++;
+t=(*C)[i];
+}
+//
+z[i+1]='\0';
+//
+free(*C);
+(*C)=NULL;
+(*C)=z;
+return;
+//
+}
+
+char* toString(unsigned char* C){
+int i=0;
+char c = ' ';
+c=C[i];
+char* v = malloc(sizeof(strlen(C)+1));
+while(c!='\0'){
+v[i]=c;
+i++;
+c=C[i];
+}
+v[i]='\0';
+return v;
+}
+
+
+bool FileinDir(char* Path){
+struct dirent* currentThing;
+DIR* Directory = opendir(".");
+
+do{
+if(Directory!=NULL)
+currentThing=readdir(Directory);
+if(currentThing==NULL){
+printf("\nDone Reading Directory\n");
+break;
+}
+if(strcmp(currentThing->d_name,Path)==0){
+printf("\n\nFOUND A MATCH!\n\n");
+return true;
+}
+}while(currentThing!=NULL);
+
+
+
+return false;
+}
+

@@ -1,0 +1,41 @@
+<?xml version= "1.0" encoding="UTF-8"?>
+<fileIndex>
+	<word text ="a">
+		<file name = "F">2</file>
+		<file name = "ABCDE">1</file>
+		<file name = "FIE">1</file>
+	</word>
+	<word text ="asdf">
+		<file name = "ABCDE">4</file>
+		<file name = "FIE">1</file>
+	</word>
+	<word text ="asgha">
+		<file name = "FOT2.txt">1</file>
+	</word>
+	<word text ="b">
+		<file name = "ABCDE">1</file>
+	</word>
+	<word text ="ba">
+		<file name = "F">1</file>
+	</word>
+	<word text ="c">
+		<file name = "ABCDE">1</file>
+	</word>
+	<word text ="d">
+		<file name = "ABCDE">1</file>
+	</word>
+	<word text ="e">
+		<file name = "ABCDE">1</file>
+		<file name = "FIE">1</file>
+	</word>
+	<word text ="f">
+		<file name = "ABCDE">1</file>
+		<file name = "FIE">2</file>
+	</word>
+	<word text ="ffff">
+		<file name = "F">1</file>
+	</word>
+	<word text ="fffff">
+		<file name = "F">1</file>
+	</word>
+</fileIndex>

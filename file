@@ -1,0 +1,21 @@
+<?xml version= "1.0" encoding="UTF-8"?>
+<fileIndex>
+	<word text ="yes">
+		<file name = "file3.txt">1</file>
+	</word>
+	<word text ="deffinitely">
+		<file name = "file1.txt">1</file>
+	</word>
+	<word text ="hahh">
+		<file name = "file2.txt">1</file>
+	</word>
+	<word text ="fie">
+		<file name = "file.txt">1</file>
+	</word>
+	<word text ="for">
+		<file name = "file.txt">1</file>
+	</word>
+	<word text ="fum">
+		<file name = "file.txt">1</file>
+	</word>
+</fileIndex>
